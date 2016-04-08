@@ -5,9 +5,7 @@
  *     TreeNode *right;
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
- *
-dfhf
-
+ */
 
 class Solution {
 public:
