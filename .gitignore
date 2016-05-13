@@ -31,3 +31,5 @@ bject files
 # Debug files
 *.dSYM/
 
+#test file
+TestMain.c
