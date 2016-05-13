@@ -1,44 +1,44 @@
-////Write an algorithm to determine if a number is "happy".
-////
-////A happy number is a number defined by the following process: Starting with any positive integer, replace the number by the sum of the squares of its digits, and repeat the process until the number equals 1 (where it will stay), or it loops endlessly in a cycle which does not include 1. Those numbers for which this process ends in 1 are happy numbers.
-////
-////Example: 19 is a happy number
-////
-////12 + 92 = 82
-////82 + 22 = 68
-////62 + 82 = 100
-////12 + 02 + 02 = 1
-//#include<iostream>
-//using namespace std;
+//Write an algorithm to determine if a number is "happy".
 //
-//class Solution {
-//public:
-//    bool isHappy(int n) {
-//        bool isHappy=true;
-//        int temp,sum;
-//        map<int,int>bufs;
+//A happy number is a number defined by the following process: Starting with any positive integer, replace the number by the sum of the squares of its digits, and repeat the process until the number equals 1 (where it will stay), or it loops endlessly in a cycle which does not include 1. Those numbers for which this process ends in 1 are happy numbers.
 //
-//        while(n!=1){
-//            temp=n;
-//            sum=0;
-//            while(temp){
-//                sum+=(temp%10)*(temp%10);
-//                temp/=10;
-//            }
-//            if(bufs.find(sum)!=bufs.end()){
-//                isHappy=false;
-//                break;
-//            }
-//            bufs.insert(make_pair(sum,n));
-//            n=sum;
-//        }
-//        return isHappy;
-//    }
-//};
+//Example: 19 is a happy number
 //
-//int main()
-//{
-//
-//
-//    return 0;
-//}
+//12 + 92 = 82
+//82 + 22 = 68
+//62 + 82 = 100
+//12 + 02 + 02 = 1
+#include<iostream>
+using namespace std;
+
+class Solution {
+public:
+    bool isHappy(int n) {
+        bool isHappy=true;
+        int temp,sum;
+        map<int,int>bufs;
+
+        while(n!=1){
+            temp=n;
+            sum=0;
+            while(temp){
+                sum+=(temp%10)*(temp%10);
+                temp/=10;
+            }
+            if(bufs.find(sum)!=bufs.end()){
+                isHappy=false;
+                break;
+            }
+            bufs.insert(make_pair(sum,n));
+            n=sum;
+        }
+        return isHappy;
+    }
+};
+
+int main()
+{
+
+
+    return 0;
+}
