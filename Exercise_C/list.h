@@ -60,6 +60,70 @@ static int list_insert_tail(node* head,void* data)
 	return 0;
 }
 
+static void* list_get_head(node* head)
+{
+	if(head==NULL || head->next==head)return NULL;
+	return head->next->data;
+}
+
+static void* list_get_tail(node* head)
+{
+	if(head==NULL || head->prev==head)return NULL;
+	return head->prev->data;
+}
+
+static int list_delete_head(node* head)
+{
+	if(head==NULL || head->next==head)return 0;
+	node* p=head->next;
+	head->next=p->next;
+	p->next->prev=head;
+	free(p);
+	*(int*)(head->data)-=1;
+	return 1;
+}
+
+static int list_delete_tail(node* head)
+{
+	if(head==NULL || head->prev==head)return 0;
+	node* p=head->prev;
+	head->prev=p->prev;
+	p->prev->next=head;
+	free(p);
+	*(int*)(head->data)-=1;
+	return 1;
+}
+
+static void* list_at(node* head,int n)
+{
+	if(head==NULL)return NULL;
+	int size=*(int*)head->data;
+	if(n<0 || n>=size)return NULL;
+
+	node* p=head->next;
+	while(n--)p=p->next;
+	return p->data;
+}
+
+static void list_sort(node *head,int (*compare)(void*,void*))
+{
+	int size=*(int*)head->data;
+	if(size==0)return ;
+
+	//bubble sort
+	int flag=1;
+	for(node* begin=head->next,*end=head->prev;begin!=end && flag==1;end=end->prev){
+		for(node* index=begin;index!=end;index=index->next){
+			if(compare(index->data,index->next->data)){
+				void* temp=index->data;
+				index->data=index->next->data;
+				index->next->data=temp;
+				flag=1;
+			}
+		}
+	}
+}
+
 static int list_count(node* head)
 {	
 	if(head==NULL)return 0;
@@ -67,17 +131,17 @@ static int list_count(node* head)
 }
 
 //define by yourself according to the data type
-static int list_compare_node(node* p,void* data)
+static int list_compare_node(void* lhs,void* rhs)
 {
-	return *(int*)(p->data)==*(int*)(data);
+	return *(int*)(lhs)>=*(int*)(rhs);
 }
 
-static int list_delete(node* head,void* d,int(*compare)(node*,void*))
+static int list_delete(node* head,void* d,int(*compare)(void*,void*))
 {
-	if(head==NULL)return -1;
+	if(head==NULL)return 0;
 	node* p=head->next;
 	while(p!=head){
-		if(compare(p,d)){
+		if(compare(p->data,d)){
 			p->prev->next=p->next;
 			p->next->prev=p->prev;
 			free(p);
@@ -86,12 +150,12 @@ static int list_delete(node* head,void* d,int(*compare)(node*,void*))
 		}
 		p=p->next;
 	}
-	return -1;
+	return 0;
 }
 
 static int free_list(node** head)
 {
-	if(*head==NULL)return -1;
+	if(*head==NULL)return 0;
 	int cnt=0;
 	node* p=(*head)->next;
 	node* q;
