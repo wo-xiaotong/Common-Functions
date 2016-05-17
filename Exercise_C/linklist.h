@@ -1,15 +1,19 @@
+#ifndef LINKLIST_H
+#define LINKLIST_H
+
+
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct linknode{
+typedef struct linklist{
 	void* data;
-	struct linknode* prev;
-	struct linknode* next;
-}node;
+	struct linklist* prev;
+	struct linklist* next;
+}linklist;
 
-static int init_list(node** head)
+static int init_list(linklist** head)
 {
-	*head=(node*)malloc(sizeof(node));
+	*head=(linklist*)malloc(sizeof(linklist));
 	if(*head==NULL){
 		return -1;
 	}
@@ -24,10 +28,10 @@ static int init_list(node** head)
 	return 1;
 }
 
-static int list_insert_head(node* head,void* data)
+static int list_insert_head(linklist* head,void* data)
 {
 	if(head==NULL)return 0;
-	node* p=(node*)malloc(sizeof(node));
+	linklist* p=(linklist*)malloc(sizeof(linklist));
 	if(p==NULL){
 		return 0;
 	}
@@ -42,10 +46,10 @@ static int list_insert_head(node* head,void* data)
 	return 0;
 }
 
-static int list_insert_tail(node* head,void* data)
+static int list_insert_tail(linklist* head,void* data)
 {
 	if(head==NULL)return 0;
-	node* p=(node*)malloc(sizeof(node));
+	linklist* p=(linklist*)malloc(sizeof(linklist));
 	if(p==NULL){
 		return 0;
 	}
@@ -60,22 +64,22 @@ static int list_insert_tail(node* head,void* data)
 	return 0;
 }
 
-static void* list_get_head(node* head)
+static void* list_get_head(linklist* head)
 {
 	if(head==NULL || head->next==head)return NULL;
 	return head->next->data;
 }
 
-static void* list_get_tail(node* head)
+static void* list_get_tail(linklist* head)
 {
 	if(head==NULL || head->prev==head)return NULL;
 	return head->prev->data;
 }
 
-static int list_delete_head(node* head)
+static int list_delete_head(linklist* head)
 {
 	if(head==NULL || head->next==head)return 0;
-	node* p=head->next;
+	linklist* p=head->next;
 	head->next=p->next;
 	p->next->prev=head;
 	free(p);
@@ -83,10 +87,10 @@ static int list_delete_head(node* head)
 	return 1;
 }
 
-static int list_delete_tail(node* head)
+static int list_delete_tail(linklist* head)
 {
 	if(head==NULL || head->prev==head)return 0;
-	node* p=head->prev;
+	linklist* p=head->prev;
 	head->prev=p->prev;
 	p->prev->next=head;
 	free(p);
@@ -94,26 +98,26 @@ static int list_delete_tail(node* head)
 	return 1;
 }
 
-static void* list_at(node* head,int n)
+static void* list_at(linklist* head,int n)
 {
 	if(head==NULL)return NULL;
 	int size=*(int*)head->data;
 	if(n<0 || n>=size)return NULL;
 
-	node* p=head->next;
+	linklist* p=head->next;
 	while(n--)p=p->next;
 	return p->data;
 }
 
-static void list_sort(node *head,int (*compare)(void*,void*))
+static void list_sort(linklist *head,int (*compare)(void*,void*))
 {
 	int size=*(int*)head->data;
 	if(size==0)return ;
 
 	//bubble sort
 	int flag=1;
-	for(node* begin=head->next,*end=head->prev;begin!=end && flag==1;end=end->prev){
-		for(node* index=begin;index!=end;index=index->next){
+	for(linklist* begin=head->next,*end=head->prev;begin!=end && flag==1;end=end->prev){
+		for(linklist* index=begin;index!=end;index=index->next){
 			if(compare(index->data,index->next->data)){
 				void* temp=index->data;
 				index->data=index->next->data;
@@ -124,7 +128,7 @@ static void list_sort(node *head,int (*compare)(void*,void*))
 	}
 }
 
-static int list_count(node* head)
+static int list_count(linklist* head)
 {	
 	if(head==NULL)return 0;
 	return *(int*)(head->data);
@@ -136,10 +140,10 @@ static int list_compare_node(void* lhs,void* rhs)
 	return *(int*)(lhs)>=*(int*)(rhs);
 }
 
-static int list_delete(node* head,void* d,int(*compare)(void*,void*))
+static int list_delete(linklist* head,void* d,int(*compare)(void*,void*))
 {
 	if(head==NULL)return 0;
-	node* p=head->next;
+	linklist* p=head->next;
 	while(p!=head){
 		if(compare(p->data,d)){
 			p->prev->next=p->next;
@@ -153,12 +157,12 @@ static int list_delete(node* head,void* d,int(*compare)(void*,void*))
 	return 0;
 }
 
-static int free_list(node** head)
+static int free_list(linklist** head)
 {
 	if(*head==NULL)return 0;
 	int cnt=0;
-	node* p=(*head)->next;
-	node* q;
+	linklist* p=(*head)->next;
+	linklist* q;
 	while(p!=(*head)){
 		q=p->next;
 		free(p);
@@ -177,22 +181,24 @@ static void list_print_node(void* data)
 	printf("%d\n",*(int*)data);
 }
 
-static void print_list(node* head,void(*print)(void*))
+static void print_list(linklist* head,void(*print)(void*))
 {
 	if(head==NULL)return ;
-	node* p=head->next;
+	linklist* p=head->next;
 	while(p!=head){
 		print(p->data);
 		p=p->next;
 	}
 }
 
-static void print_list_reverse(node* head,void(*print)(void*))
+static void print_list_reverse(linklist* head,void(*print)(void*))
 {
 	if(head==NULL)return ;
-	node* p=head->prev;
+	linklist* p=head->prev;
 	while(p!=head){
 		print(p->data);
 		p=p->prev;
 	}
 }
+
+#endif
