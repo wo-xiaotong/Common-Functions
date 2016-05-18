@@ -5,6 +5,46 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+	@usage:
+
+	linklist* head;
+	init_list(&head);
+
+	int i=1;
+	int j=2;
+	list_insert_head(head,&i);
+	list_insert_head(head,&j);
+
+	printf("%d\n",*(int*)list_get_head(head));
+	printf("%d\n",*(int*)list_get_tail(head));
+	list_delete_tail(head);
+	printf("%d\n",list_count(head));
+	list_delete_head(head);
+	list_delete_tail(head);
+	printf("%d\n",list_count(head));
+	list_delete_head(head);
+	list_delete_tail(head);
+	printf("%d\n",list_count(head));
+	print_list(head,list_print_node);
+	
+	int A[100];
+	srand(time(NULL));
+
+	int cnt=100;
+	while(cnt--){
+		A[cnt]=rand()%100;
+		list_insert_head(head,A+cnt);
+	}
+	
+	//printf("%d\n",list_count(head));
+	//printf("%d\n",*(int*)list_at(head,10));
+	int i=50;
+	list_sort(head,list_compare_node);
+	while(list_delete(head,&i,list_compare_node));
+	print_list(head,list_print_node);
+*/
+
 typedef struct linklist{
 	void* data;
 	struct linklist* prev;
