@@ -1,3 +1,0 @@
-1.<string>中函数to_string()可以将int->string
-2.stack的pop()方法并不返回值，得到顶值必须要top()函数
-3.find（A.begin(),A.end(),value）;  返回第一个找到的值的迭代器，否则返回A.end()
