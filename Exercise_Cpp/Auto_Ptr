@@ -1,0 +1,47 @@
+template<typename T>
+class Auto_Ptr
+{
+public:
+	Auto_Ptr<T>(T *p) : p_val(p), p_cnt(new P_Cnt){}
+	~Auto_Ptr();
+	T& operator*(){ return *p_val; }
+	T* operator->(){ return p_val; }
+	Auto_Ptr<T>(const Auto_Ptr &other);
+	Auto_Ptr<T>& operator=(const Auto_Ptr<T> &other);
+	int userCount(){ return p_cnt->count; }
+	
+private:
+	class P_Cnt{
+	public:
+		P_Cnt() :count(1){}
+		~P_Cnt(){ cout << "~p_cnt\n"; }
+	private:
+		friend Auto_Ptr;
+		int count;
+	};
+
+	P_Cnt *p_cnt;
+	T *p_val;
+};
+
+template<typename T>
+Auto_Ptr<T>::~Auto_Ptr(){
+	if (--p_cnt->count == 0){
+		delete p_cnt;
+		delete p_val;
+	}
+}
+
+template<typename T>
+Auto_Ptr<T>::Auto_Ptr(const Auto_Ptr &other){
+	p_val = other.p_val;
+	++other.p_cnt->count;
+	p_cnt = other.p_cnt;
+}
+template<typename T>
+Auto_Ptr<T>& Auto_Ptr<T>::operator=(const Auto_Ptr &other){
+	p_val = other.p_val;
+	++other.p_cnt->count;
+	p_cnt = other.p_cnt;
+	return *this;
+}
